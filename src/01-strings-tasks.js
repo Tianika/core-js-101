@@ -200,7 +200,9 @@ function extractEmails(str) {
  *             '└──────────┘\n'
  *
  */
-function getRectangleString(width, height) {}
+function getRectangleString(/* width, height */) {
+  throw new Error('Not implemented');
+}
 
 /**
  * Encode specified string with ROT13 cipher
