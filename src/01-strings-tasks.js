@@ -200,8 +200,17 @@ function extractEmails(str) {
  *             '└──────────┘\n'
  *
  */
-function getRectangleString(/* width, height */) {
-  throw new Error('Not implemented');
+function getRectangleString(width, height) {
+  const str1 = `${String.fromCharCode(0x250c)}${String.fromCharCode(0x2500).repeat(width - 2)}${String.fromCharCode(0x2510)}`;
+  let str = '';
+
+  for (let i = 0; i < height - 2; i += 1) {
+    str += `\n${String.fromCharCode(0x2502)}${' '.repeat(width - 2)}${String.fromCharCode(0x2502)}`;
+  }
+
+  const str2 = `\n${String.fromCharCode(0x2514)}${String.fromCharCode(0x2500).repeat(width - 2)}${String.fromCharCode(0x2518)}\n`;
+
+  return str1 + str + str2;
 }
 
 /**
@@ -220,8 +229,30 @@ function getRectangleString(/* width, height */) {
  *    => 'NOPQRSTUVWXYZABCDEFGHIJKLMnopqrstuvwxyzabcdefghijklm'
  *
  */
-function encodeToRot13(/* str */) {
-  throw new Error('Not implemented');
+function encodeToRot13(str) {
+  const result = [];
+
+  for (let i = 0; i < str.length; i += 1) {
+    let code = str.charCodeAt(i);
+
+    if ((code > 64 && code < 91) || (code > 96 && code < 123)) {
+      code += 13;
+
+      if (code < 91) {
+        result.push(String.fromCharCode(code));
+      } else if (code < 104) {
+        result.push(String.fromCharCode(code - 26));
+      } else if (code < 123) {
+        result.push(String.fromCharCode(code));
+      } else {
+        result.push(String.fromCharCode(code - 26));
+      }
+    } else {
+      result.push(str[i]);
+    }
+  }
+
+  return result.join('');
 }
 
 /**
@@ -237,8 +268,9 @@ function encodeToRot13(/* str */) {
  *   isString('test') => true
  *   isString(new String('test')) => true
  */
-function isString(/* value */) {
-  throw new Error('Not implemented');
+function isString(value) {
+  const str = value;
+  return typeof str === 'string' || str instanceof String;
 }
 
 /**
@@ -265,8 +297,15 @@ function isString(/* value */) {
  *   'Q♠' => 50
  *   'K♠' => 51
  */
-function getCardId(/* value */) {
-  throw new Error('Not implemented');
+function getCardId(value) {
+  const suits = ['♣', '♦', '♥', '♠'];
+  const cards = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+
+  if (value.length === 3) {
+    return (cards.indexOf(value.slice(0, 2)) + suits.indexOf(value[2]) * 13);
+  }
+
+  return (cards.indexOf(value[0]) + suits.indexOf(value[1]) * 13);
 }
 
 module.exports = {
