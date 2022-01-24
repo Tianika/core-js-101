@@ -54,8 +54,27 @@ function willYouMarryMe(isPositiveAnswer) {
  *    })
  *
  */
-function processAllPromises(/* array */) {
-  throw new Error('Not implemented');
+function processAllPromises(array) {
+  return new Promise((resolve) => {
+    const count = array.length;
+    const result = [];
+    let num = 0;
+
+    function check(promise) {
+      if (promise) {
+        result.push(promise);
+        num += 1;
+      }
+    }
+
+    array.forEach((promise) => {
+      while (num < count) {
+        check(promise);
+      }
+    });
+
+    resolve(result);
+  });
 }
 
 /**
